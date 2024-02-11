@@ -84,7 +84,7 @@ class Prompt:
             if not bot_name in message.user:
                 yield {
                     "role": "user",
-                    "name": message.user,
+                    "name": remove_special_characters(message.user),
                     "content": message.text,
                 }
             else:
