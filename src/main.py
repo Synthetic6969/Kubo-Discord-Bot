@@ -4,8 +4,8 @@ from typing import Literal, Optional, Union
 import discord
 from discord import Message as DiscordMessage, app_commands
 import logging
-from src.base import Message, Conversation, ThreadConfig
-from src.constants import (
+from base import Message, Conversation, ThreadConfig
+from constants import (
     BOT_INVITE_URL,
     DISCORD_BOT_TOKEN,
     EXAMPLE_CONVOS,
@@ -16,16 +16,16 @@ from src.constants import (
     DEFAULT_MODEL,
 )
 import asyncio
-from src.utils import (
+from utils import (
     logger,
     should_block,
     close_thread,
     is_last_message_stale,
     discord_message_to_message,
 )
-from src import completion
-from src.completion import generate_completion_response, process_response
-from src.moderation import (
+import completion
+from completion import generate_completion_response, process_response
+from moderation import (
     moderate_message,
     send_moderation_blocked_message,
     send_moderation_flagged_message,
@@ -51,7 +51,7 @@ async def on_ready():
     for c in EXAMPLE_CONVOS:
         messages = []
         for m in c.messages:
-            if m.user == "TurkishNation":
+            if m.user == "Lenard":
                 messages.append(Message(user=client.user.name, text=m.text))
             else:
                 messages.append(m)
@@ -188,6 +188,9 @@ async def chat_command(
 @client.event
 async def on_message(message: DiscordMessage):
     try:
+        # block servers not in allow list
+        if should_block(guild=message.guild):
+            return
 
         # ignore messages from the bot
         if message.author == client.user:

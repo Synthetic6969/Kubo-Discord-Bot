@@ -3,6 +3,12 @@ from typing import Optional, List
 
 SEPARATOR_TOKEN = "<|endoftext|>"
 
+def remove_special_characters(s):
+    # Define a list of special characters to remove
+    special_chars = "!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
+    
+    # Use a string's translate method to remove any special characters
+    return s.translate(str.maketrans('', '', special_chars))
 
 @dataclass(frozen=True)
 class Message:
@@ -10,7 +16,7 @@ class Message:
     text: Optional[str] = None
 
     def render(self):
-        result = self.user + ":"
+        result = remove_special_characters(self.user) + ":"
         if self.text is not None:
             result += " " + self.text
         return result

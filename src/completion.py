@@ -3,17 +3,17 @@ from dataclasses import dataclass
 import openai
 from openai import AsyncOpenAI
 
-from src.moderation import moderate_message
+from moderation import moderate_message
 from typing import Optional, List
-from src.constants import (
+from constants import (
     BOT_INSTRUCTIONS,
     BOT_NAME,
     EXAMPLE_CONVOS,
 )
 import discord
-from src.base import Message, Prompt, Conversation, ThreadConfig
-from src.utils import split_into_shorter_messages, close_thread, logger
-from src.moderation import (
+from base import Message, Prompt, Conversation, ThreadConfig
+from utils import split_into_shorter_messages, close_thread, logger
+from moderation import (
     send_moderation_flagged_message,
     send_moderation_blocked_message,
 )
@@ -162,7 +162,7 @@ async def process_response(
     else:
         await thread.send(
             embed=discord.Embed(
-                description=f"**Error, message otto10 how this error occured** - {status_text}",
+                description=f"**Error** - {status_text}",
                 color=discord.Color.yellow(),
             )
         )

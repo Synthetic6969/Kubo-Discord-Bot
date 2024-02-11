@@ -1,12 +1,15 @@
+from constants import (
+    ALLOWED_SERVER_IDS,
+)
 import logging
 
 logger = logging.getLogger(__name__)
-from src.base import Message
+from base import Message
 from discord import Message as DiscordMessage
 from typing import Optional, List
 import discord
 
-from src.constants import MAX_CHARS_PER_REPLY_MSG, INACTIVATE_THREAD_PREFIX
+from constants import MAX_CHARS_PER_REPLY_MSG, INACTIVATE_THREAD_PREFIX
 
 
 def discord_message_to_message(message: DiscordMessage) -> Optional[Message]:
@@ -60,4 +63,8 @@ def should_block(guild: Optional[discord.Guild]) -> bool:
         logger.info(f"DM not supported")
         return True
 
+    if guild.id and guild.id not in ALLOWED_SERVER_IDS:
+        # not allowed in this server
+        logger.info(f"Guild {guild} not allowed")
+        return True
     return False
